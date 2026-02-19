@@ -1,16 +1,66 @@
-import React from 'react';
-import { ArrowRight, PlayCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { EMAIL_CONTACT } from '../constants';
 
 const Hero: React.FC = () => {
+  const [particles, setParticles] = useState<Array<{
+    left: number;
+    top: number;
+    size: number;
+    duration: number;
+    delay: number;
+    opacity: number;
+  }>>([]);
+
+  useEffect(() => {
+    // Generate particles on client side to avoid hydration mismatch if SSR (though this is SPA)
+    // and to ensure randomness on mount.
+    const newParticles = Array.from({ length: 35 }).map(() => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: Math.random() * 3 + 1, // 1px to 4px
+      duration: Math.random() * 20 + 15, // 15s to 35s
+      delay: Math.random() * -20, // Negative delay to start mid-cycle
+      opacity: Math.random() * 0.4 + 0.1, // 0.1 to 0.5
+    }));
+    setParticles(newParticles);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-slate-950">
       {/* Background Animation Layer */}
       <div className="absolute inset-0 w-full h-full overflow-hidden -z-10">
-        {/* Animated Orbs */}
-        <div className="absolute top-0 left-[-10%] w-[500px] h-[500px] bg-indigo-500/30 rounded-full blur-[100px] animate-blob mix-blend-screen" />
-        <div className="absolute top-0 right-[-10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[100px] animate-blob mix-blend-screen" style={{ animationDelay: '2s' }} />
-        <div className="absolute -bottom-32 left-[20%] w-[600px] h-[600px] bg-indigo-800/20 rounded-full blur-[120px] animate-blob mix-blend-screen" style={{ animationDelay: '4s' }} />
+        {/* Animated Orbs - Refined for subtlety */}
+        <div className="absolute top-0 left-[-10%] w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] animate-blob mix-blend-screen" />
+        <div className="absolute top-0 right-[-10%] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] animate-blob mix-blend-screen" style={{ animationDelay: '2s' }} />
+        <div className="absolute -bottom-32 left-[20%] w-[600px] h-[600px] bg-indigo-800/10 rounded-full blur-[120px] animate-blob mix-blend-screen" style={{ animationDelay: '4s' }} />
+        
+        {/* Floating Particles */}
+        {particles.map((p, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-indigo-200 pointer-events-none"
+            style={{
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              opacity: 0, // Initial state handled by keyframes
+              animation: `float-up ${p.duration}s linear infinite`,
+              animationDelay: `${p.delay}s`,
+              '--target-opacity': p.opacity,
+            } as React.CSSProperties}
+          />
+        ))}
+
+        <style>{`
+          @keyframes float-up {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: var(--target-opacity); }
+            90% { opacity: var(--target-opacity); }
+            100% { transform: translateY(-120px) translateX(30px); opacity: 0; }
+          }
+        `}</style>
         
         {/* Futuristic Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#818cf810_1px,transparent_1px),linear-gradient(to_bottom,#818cf810_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] pointer-events-none" />

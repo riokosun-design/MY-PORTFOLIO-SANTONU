@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Terminal, Code, Cpu } from 'lucide-react';
+import { Terminal, Code } from 'lucide-react';
 
 const About: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -20,12 +20,13 @@ const About: React.FC = () => {
       }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (sectionRef.current) observer.disconnect();
+      if (currentRef) observer.disconnect();
     };
   }, []);
 

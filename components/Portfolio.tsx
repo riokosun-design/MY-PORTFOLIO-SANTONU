@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FEATURED_PROJECTS, CLIENT_ARCHIVE } from '../constants';
-import { Star, ExternalLink, LayoutGrid, List } from 'lucide-react';
+import { Star, LayoutGrid, List } from 'lucide-react';
 
 const Portfolio: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'featured' | 'archive'>('featured');

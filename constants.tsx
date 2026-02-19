@@ -2,7 +2,6 @@ import { Project, ClientSummary, Service, Testimonial, FaqItem } from './types';
 import { 
   Bot, 
   Workflow, 
-  Zap, 
   LineChart, 
   Code2, 
   BrainCircuit,
